@@ -1,38 +1,53 @@
 public class Correo {
-    Mensaje mensaje;
-    Object lock = new Object();
+    /**
+     * Mensaje
+     */
+    private String mensaje;
+    /**
+     * Booleano para saber si hay mensaje
+     */
+    private Boolean lleno;
 
-    public Correo(Mensaje mensaje) {
-        synchronized (lock){
+    /**
+     * Constructor
+     */
+    public Correo() {
+        this.lleno = false;
+    }
+
+    /**
+     * Metodo para leer correo si hay mensaje
+     */
+    public synchronized void leerCorreo(){
+        if(Boolean.TRUE.equals(lleno)){
+            System.out.println("Mensaje: " + this.mensaje);
+            mensaje = "";
+            this.lleno = false;
+        }else {
+            System.out.println("No hay mensajes");
+        }
+    }
+
+    /**
+     * Metodo para crear un nuevo mensaje si no hay uno
+     * @param mensaje
+     */
+    public synchronized void nuevoMensaje(String mensaje) {
+        if (Boolean.FALSE.equals(lleno)) {
+            System.out.println("creando mensaje: "+mensaje);
             this.mensaje = mensaje;
+            this.lleno = true;
+        } else {
+            System.out.println("Ya hay un mensaje");
         }
     }
 
-    public Mensaje getMensaje() {
-        synchronized (lock){
-            return mensaje;
-        }
+    /**
+     * Metodo para generar un mensaje de prueba
+     * @return mensaje
+     */
+    public String generarMensaje() {
+        return "Mensaje de prueba "+Math.random();
     }
 
-    public void setMensaje(Mensaje mensaje) {
-        this.mensaje = mensaje;
-    }
-
-    public void leerCorreo(){
-        if(mensaje == null){
-                System.out.println("No hay mensajes");
-        }else{
-                System.out.println("De: " + mensaje.getEmisor());
-                System.out.println("Para: " + mensaje.getReceptor());
-                System.out.println("Mensaje: " + mensaje.getMensaje());
-        }
-    }
-
-    public void recibirCorreo(String emisor, String receptor, String mensaje){
-        this.mensaje = new Mensaje(emisor, receptor, mensaje);
-    }
-
-    public void eliminarCorreo(){
-            mensaje = null;
-    }
 }

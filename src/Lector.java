@@ -1,15 +1,36 @@
-public class Lector extends Thread{
-    Correo correo;
-    public Lector(Correo correo){
+public class Lector extends Thread {
+    /**
+     * Correo sobre el que se va a trabajar
+     */
+    private Correo correo;
+
+    /**
+     * Constructor
+     * @param correo
+     */
+    public Lector(Correo correo) {
         this.correo = correo;
     }
 
-    public void run(){
-        while(true){
-            if(correo.mensaje != null){
-                correo.leerCorreo();
-                correo.eliminarCorreo();
-            }
+    /**
+     * Metodo run
+     */
+    @Override
+    public void run() {
+        while (true) {
+            correo.leerCorreo();
+            dormir();
+        }
+    }
+
+    /**
+     * Metodo para dormir
+     */
+    public void dormir(){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
